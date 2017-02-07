@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<style>
+		textarea{
+			resize: none;
+		}
+
+	</style>
+	<script  type="text/javascript">
+	//限制Title不能为空！
+	function title_required(field,alerttxt)  
+	{
+		with (field)
+  		{
+  			if (value==null||value=="")
+    		{alert(alerttxt);return false}
+  			else {return true}
+  		}
+	}
+
+	function title_form(thisform)
+	{
+		with (thisform)
+  		{
+  		if (title_required(title,"Title不能为空!")==false)
+    	{
+    		title.focus();
+    		return false
+    	}
+  		}
+	}
+
+//控制文本框的最大输入字数。
+	function getStringUTFLength(str){
+		var value = str.replace(/[u4e00-u9fa5]/g," ");
+		return value.length;
+	}
+
+	function leftUTFString(str,len){
+		if (getStringUTFLength(str)<=len){
+			return str;
+		}
+		var value = str.substring(0,len);
+		while (getStringUTFLength(value)>len){
+			value = value.substring(0,value.length-1);
+		}
+		return value
+	}
+
+	//存储表单数据
+	// function setLocaStorage(){
+	// 	localStorage.setItem("title",document.getElementById("title").value);
+	// 	localStorage.setItem("duedata",document.getElementById("duedata").value);
+	// 	localStorage.setItem("reminder",document.getElementById("reminder").value);
+	// 	localStorage.setItem("repeat",document.getElementById("repeat").value);
+	// 	localStorage.setItem("priority",document.getElementById("priority").value);
+	// 	localStorage.setItem("notes",document.getElementById("notes").value);
+	// }
+
+	function setLocaStorage(){
+		var temp_arr = {};
+		temp_arr['title'] = document.getElementById("title").value;
+		temp_arr['duedata'] = document.getElementById("duedata").value;
+		temp_arr['reminder'] = document.getElementById("reminder").value;
+		temp_arr['repeat'] = document.getElementById("repeat").value;
+		temp_arr['completed'] = document.getElementById("completed").value;
+		temp_arr['priority'] = document.getElementById("priority").value;
+		temp_arr['notes'] = document.getElementById("notes").value;
+
+		//先取出之前的数据，然后转换成数组，用push添加
+		var all_data_json = localStorage.getItem('data');
+		console.log(all_data_json);
+		var all_data = [];
+		all_data = JSON.parse(all_data_json)||[];
+		all_data.push(temp_arr);
+
+		//把新数组存入localstorage
+		localStorage.setItem("data",JSON.stringify(all_data));
+	}
+
+	function count(){
+		var len = 512;
+		var value = document.getElementById("notes").value;
+		if (getStringUTFLength(value)>len) {
+			document.getElementById("notes").value = leftUTFString(value,len);
+		}
+		document.getElementById("result").value = len - getStringUTFLength(document.getElementById("notes").value);
+	}
+
+
+		
+	</script> 
+
+<title>Task Detail</title>
+
+</head>
+
+<body>
+
+	<div style="padding-left: 300px">
+	<form action="Task List.html" method="post" name="form" onsubmit="return title_form(this)">
+	<table cellspacing="30px">
+		<tr>
+			<td>Title:</td>
+			<td><input type="text" name="title" id="title" maxlength="32"></td>
+			<td><img src="image\xing.PNG" width="20" height="20"></td>
+		</tr>
+		<tr>
+			<td>Due Data:</td>
+			<td><input type="date" name="duedata" id="duedata" ></td>
+		</tr>
+		<tr>
+			<td>Reminder:</td>
+			<td><input type="date" name="reminder" id ="reminder"></script></td>
+		</tr>
+		<tr>
+			<td>Repeat:</td>
+			<td>
+			<select id="repeat">
+				  <option value="day">Every Day</option>
+				  <option value="week">Every Week</option>
+				  <option value="month">Every Month</option>
+				  <option value="year">Every Year</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Completed:</td>
+			<td>
+			<select id="completed">
+				  <option value="no">N</option>				  
+				  <option value="yes">Y</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Priority:</td>
+			<td><input type="number" name="priority" id="priority" min="1" max="3" step="1" value="1">
+			<!-- <select id="priority">
+				  <option value="high">High</option>
+				  <option value="normal">Normal</option>
+				  <option value="low">Low</option>
+				</select> -->
+			</td>
+		</tr>
+		<tr>
+			<td>Notes:</td>
+			<td><textarea type="text" name="notes"  id ="notes" rows="10" cols="40" onchange="count()" onkeypress="count()" onblur="count()"></textarea>
+			<br/>
+				您还可以输入的最大字数为：<input readonly type="text" name="result" id="result" size="1" value="512">
+			</td>
+		</tr>
+		<tr>
+			<td><input type="submit" name="save" value="Save" onclick="setLocaStorage()"></td>
+			<td><input type="submit" name="delete" value="Delete"></td>
+		</tr>
+	</table>
+	</form>
+	</div> 
+
+
+</body>
+</html>

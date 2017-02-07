@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+
+<style type="text/css">
+	p{
+		padding-left: 400px;
+	}
+</style>
+
+<title>Task List</title>
+
+
+</head>
+<body>
+<script type="text/javascript">
+	//以YYYY-MM-DD的格式格式化当前日期。
+	
+	function getNowFormatDate() {
+    	var date = new Date();
+    	var seperator = "-";
+    	var year = date.getFullYear();
+    	var month = date.getMonth() + 1;
+    	var strDate = date.getDate();
+    	if (month >= 1 && month <= 9) {
+        	month = "0" + month;
+    	}
+    	if (strDate >= 0 && strDate <= 9) {
+        	strDate = "0" + strDate;
+    	}
+    	var currentdate = year + seperator + month + seperator + strDate
+    	return currentdate;
+	}
+
+	window.onload = function(){
+		var all_data_json = localStorage.getItem('data');
+		var all_data=[];
+		var star_count=0;
+		var today_count=0;
+		var week_count=0;
+		var all_count=0
+		var completed_count=0;
+		var recycle_count=0;
+		console.log(all_data_json);
+		all_data=JSON.parse(all_data_json);
+		console.log(all_data[1].duedata);
+		for (var i = 0; i < all_data.length; i++) {
+			
+			var tit = '<a href="Task List Items.html">'+all_data[i].title+'</a>';
+			
+			if(all_data[i].title !="" && all_data[i].completed == "no"){
+				star_count++;
+				document.getElementById("starred").innerHTML = document.getElementById("starred").innerHTML+tit+". ";
+				document.getElementById("star_count").innerHTML = star_count;
+			}
+
+			if (all_data[i].completed == "no") {
+				all_count++;
+				document.getElementById("all").innerHTML = document.getElementById("all").innerHTML+tit+". ";
+				document.getElementById("all_count").innerHTML = all_count;
+			}
+			if (all_data[i].completed == "no"&&all_data[i].duedata==getNowFormatDate()) {
+				today_count++;
+				document.getElementById("today").innerHTML = document.getElementById("today").innerHTML+tit+". ";
+				document.getElementById("today_count").innerHTML = today_count;
+			}
+			if (all_data[i].completed == "yes") {
+				completed_count++;
+				document.getElementById("completed").innerHTML = document.getElementById("completed").innerHTML+tit+". ";
+				document.getElementById("completed_count").innerHTML = completed_count;
+			}
+			
+		}
+	}
+
+
+
+	
+</script>
+
+	<center><h1>Task List</h1></center>
+
+	<div style="padding-left: 300px">
+	<table cellspacing="20">
+		<tr>
+			<td><img src="image\xing.PNG" width="20" height="20"></td>
+			<td>Starred</td>
+			<td width="60%" id="starred"></td></a>
+			<td id="star_count"></td>
+		</tr>
+		<tr>
+			<td><img src="image\xing.PNG" width="20" height="20"></td>
+			<td>Today</td>
+			<a href="Task List Items.html"><td id="today"></td></a>
+			<td id="today_count"></td>
+		</tr>
+		<tr>
+			<td><img src="image\xing.PNG" width="20" height="20"></td>
+			<td>Week</td>
+			<td id="week"><a href="Task List Items.html"></a></td>
+			<td id="week_count"></td>
+		</tr>
+		<tr>
+			<td><img src="image\xing.PNG" width="20" height="20"></td>
+			<td>All</td>
+			<td id="all"></td>
+			<td id="all_count"></td>
+		</tr>
+		<tr>
+			<td><img src="image\xing.PNG" width="20" height="20"></td>
+			<td>Completed</td>
+			<td id="completed"><a href="Task List Items.html"></a></td>
+			<td id="completed_count"></td>
+		</tr>
+		<tr>
+			<td><img src="image\xing.PNG" width="20" height="20"></td>
+			<td>Recycle Bin</td>
+			<td id="recycle"><a href="Task List Items.html"></a></td>
+			<td id="recycle_count"></td>
+		</tr>
+		<tr>
+			<td><img src="image\bi.jpg" width="20" height="20"></td>
+			<td><a href="Task List Items.html">Custom List A</a></td>
+		</tr>
+		<tr>
+			<td><img src="image\bi.jpg" width="20" height="20"></td>
+			<td><a href="Task List Items.html">Custom List B</a></td>
+		</tr>
+		<tr><td ><form action="creatl.html"><input type="submit" name="creatl" id="creatl" value="Creat List" /></form></td></tr>
+	</table>
+	
+	</div> 
+</body>
+</html>
